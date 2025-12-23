@@ -1,44 +1,43 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <link rel="apple-touch-icon" href="icons/icon-180.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Basic -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Psycho League Compare</title>
+
+  <!-- Styles / Scripts -->
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
-  <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#2563eb">
 
-<!-- iOS PWA support -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Owner Dash">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#2563eb">
+
+  <!-- iOS PWA Support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Owner Dash">
+
+  <!-- iOS Home Screen Icon (IMPORTANT) -->
+  <link rel="apple-touch-icon" href="icons/icon-180-v2.png">
 </head>
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./sw.js")
-        .catch(err => console.error("SW failed:", err));
-    });
-  }
-</script>
+
 <body>
   <div class="topbar">
     <div class="controls">
-      <label>Username:
+      <label>
+        Username:
         <input id="usernameInput" type="text" />
       </label>
 
-      <label>Season:
+      <label>
+        Season:
         <input id="seasonInput" type="text" />
       </label>
 
-      <label>League:
+      <label>
+        League:
         <select id="leagueSelect"></select>
       </label>
 
@@ -94,5 +93,16 @@
       </div>
     </section>
   </div>
+
+  <!-- Service Worker -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .catch(err => console.error("Service Worker failed:", err));
+      });
+    }
+  </script>
 </body>
 </html>
