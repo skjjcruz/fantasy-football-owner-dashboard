@@ -1165,7 +1165,19 @@ if (localStorage.getItem(LS_LOCKED_USERNAME)) {
   fullReload();
 } else {
   setStatus("Enter a Sleeper username, then tap Reload.");
+}  setStatus("Enter a Sleeper username, then tap Reload.");
 }
+
+// Draft Board button handler
+if (document.getElementById('draftBoardBtn')) {
+  document.getElementById('draftBoardBtn').addEventListener('click', () => {
+    const username = state.username || elUsername?.value || '';
+    const season = state.season || elSeason?.value || '2026';
+    const url = `draft-board.html?username=${encodeURIComponent(username)}&season=${encodeURIComponent(season)}`;
+    window.open(url, '_blank');
+  });
+}
+
 
 
 
