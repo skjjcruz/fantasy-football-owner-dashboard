@@ -518,4 +518,19 @@ td.player a{
   .teamsPane{
     grid-column: 1 / -1 !important;
   }
+}#draftBoardBtn {
+  height: 34px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  background: #3b82f6; /* blue instead of gold */
+  color: #fff;
+  margin-right: 8px;
 }
+
+#draftBoardBtn:hover {
+  background: #2563eb;
+}
+
