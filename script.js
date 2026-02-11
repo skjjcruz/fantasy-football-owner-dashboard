@@ -1081,7 +1081,7 @@ if (elDraftBoardBtn) {
   elDraftBoardBtn.addEventListener('click', () => {
     const username = state.username || '';
     const season = state.season || DEFAULT_LEAGUE_SEASON;
-    const url = `https://skjjcruz.github.io/Owner-Dashboard---V5/?username=${encodeURIComponent(username)}&season=${encodeURIComponent(season)}`;
+    const url = `https://skjjcruz.github.io/Owner-Dashboard---V7/?username=${encodeURIComponent(username)}&season=${encodeURIComponent(season)}`;
     window.location.href = url;
   });
 }
