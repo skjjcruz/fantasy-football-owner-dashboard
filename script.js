@@ -816,6 +816,86 @@ function fantasyProsUrl(playerObj) {
 /* =========================
    Render compare tables
 ========================= */
+function renderSingleRoster(tbody, roster, ownerId, placeholderText) {
+  if (!roster) {
+    tbody.appendChild(
+      trRow([
+        { className: "pos", text: "" },
+        { className: "player", text: placeholderText },
+        { className: "yrs", text: "" },
+        { className: "pts", text: "" },
+        { className: "gp", text: "" },
+        { className: "avg", text: "" },
+        { className: "nfl", text: "" },
+      ])
+    );
+    return;
+  }
+
+  const phone = isPhone();
+  const groups = groupPlayers(roster.players);
+  const positions = POS_ORDER.filter((p) => (groups[p]?.length || 0) > 0);
+
+  for (const pos of positions) {
+    const players = groups[pos] || [];
+    addGroupHeader(tbody, pos, players.length);
+
+    for (const p of players) {
+      const stats = state.statsByPlayerId?.[p.player_id] || null;
+      const gp = gamesPlayed(stats);
+      const pts = fantasyPointsFromScoring(stats, state.scoring);
+      const avg = gp ? pts / gp : 0;
+      const proj = getProjectionPoints(p);
+
+      const url = fantasyProsUrl(p);
+      const nameText = phone ? shortName(p.full_name || "") : (p.full_name || "");
+
+      const phoneLines = phone
+        ? [
+            `Yrs ${yearsInLeague(p) || "—"}`,
+            `Pts ${pts ? format1(pts) : "0.0"}`,
+            `GP ${gp ? String(gp) : "0"}`,
+            `Avg ${gp ? format1(avg) : "0.0"}`,
+            `Proj ${proj || "0.0"}`
+          ]
+        : [];
+
+      const playerEl = phone
+        ? buildPlayerCellEl(nameText, url, phoneLines)
+        : (() => {
+            const a = document.createElement("a");
+            a.textContent = nameText;
+            if (url) {
+              a.href = url;
+              a.target = "_blank";
+              a.rel = "noopener noreferrer";
+            }
+            a.style.color = "inherit";
+            a.style.textDecoration = "none";
+            return a;
+          })();
+
+      tbody.appendChild(
+        trRow([
+          { className: "pos posCell", text: p.position || "" },
+          { className: `player ${playerStatusClass(roster, p)}`, el: playerEl },
+          { className: "yrs", text: phone ? "" : yearsInLeague(p) },
+          { className: "pts", text: phone ? "" : (pts ? format1(pts) : "") },
+          { className: "gp", text: phone ? "" : (gp ? String(gp) : "") },
+          { className: "avg", text: phone ? "" : (gp ? format1(avg) : "") },
+          { className: "nfl", text: phone ? "" : proj },
+        ])
+      );
+    }
+
+    tbody.appendChild(
+      trRow([{ text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }], "sepRow")
+    );
+  }
+
+  addDraftPicksSection(tbody, ownerId);
+}
+
 function renderCompareTables() {
   clearTable(leftTBody);
   clearTable(rightTBody);
@@ -823,171 +903,8 @@ function renderCompareTables() {
   const leftRoster = state.currentLeftOwnerId ? state.rosterByOwner[state.currentLeftOwnerId] : null;
   const rightRoster = state.currentRightOwnerId ? state.rosterByOwner[state.currentRightOwnerId] : null;
 
-  if (!leftRoster || !rightRoster) {
-    if (!leftRoster) {
-      leftTBody.appendChild(
-        trRow([
-          { className: "pos", text: "" },
-          { className: "player", text: "Select a Left team…" },
-          { className: "yrs", text: "" },
-          { className: "pts", text: "" },
-          { className: "gp", text: "" },
-          { className: "avg", text: "" },
-          { className: "nfl", text: "" },
-        ])
-      );
-    }
-    if (!rightRoster) {
-      rightTBody.appendChild(
-        trRow([
-          { className: "pos", text: "" },
-          { className: "player", text: "Select a Right team…" },
-          { className: "yrs", text: "" },
-          { className: "pts", text: "" },
-          { className: "gp", text: "" },
-          { className: "avg", text: "" },
-          { className: "nfl", text: "" },
-        ])
-      );
-    }
-    return;
-  }
-
-  const phone = isPhone();
-
-  const leftGroups = groupPlayers(leftRoster.players);
-  const rightGroups = groupPlayers(rightRoster.players);
-
-  const positions = POS_ORDER.filter((p) => (leftGroups[p]?.length || 0) + (rightGroups[p]?.length || 0) > 0);
-
-  for (const pos of positions) {
-    const L = leftGroups[pos] || [];
-    const R = rightGroups[pos] || [];
-    const max = Math.max(L.length, R.length);
-
-    addGroupHeader(leftTBody, pos, L.length);
-    addGroupHeader(rightTBody, pos, R.length);
-
-    for (let i = 0; i < max; i++) {
-      // LEFT
-      if (L[i]) {
-        const p = L[i];
-        const stats = state.statsByPlayerId?.[p.player_id] || null;
-        const gp = gamesPlayed(stats);
-        const pts = fantasyPointsFromScoring(stats, state.scoring);
-        const avg = gp ? pts / gp : 0;
-        const proj = getProjectionPoints(p);
-
-        const url = fantasyProsUrl(p);
-        const nameText = phone ? shortName(p.full_name || "") : (p.full_name || "");
-
-        const phoneLines = phone
-          ? [
-              `Yrs ${yearsInLeague(p) || "—"}`,
-              `Pts ${pts ? format1(pts) : "0.0"}`,
-              `GP ${gp ? String(gp) : "0"}`,
-              `Avg ${gp ? format1(avg) : "0.0"}`,
-              `Proj ${proj || "0.0"}`
-            ]
-          : [];
-
-        const playerEl = phone
-          ? buildPlayerCellEl(nameText, url, phoneLines)
-          : (() => {
-              const a = document.createElement("a");
-              a.textContent = nameText;
-              if (url) {
-                a.href = url;
-                a.target = "_blank";
-                a.rel = "noopener noreferrer";
-              }
-              a.style.color = "inherit";
-              a.style.textDecoration = "none";
-              return a;
-            })();
-
-        leftTBody.appendChild(
-          trRow([
-            { className: "pos posCell", text: p.position || "" },
-            { className: `player ${playerStatusClass(leftRoster, p)}`, el: playerEl },
-            { className: "yrs", text: phone ? "" : yearsInLeague(p) },
-            { className: "pts", text: phone ? "" : (pts ? format1(pts) : "") },
-            { className: "gp", text: phone ? "" : (gp ? String(gp) : "") },
-            { className: "avg", text: phone ? "" : (gp ? format1(avg) : "") },
-            { className: "nfl", text: phone ? "" : proj },
-          ])
-        );
-      } else {
-        leftTBody.appendChild(
-          trRow([{ text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }], "emptyRow")
-        );
-      }
-
-      // RIGHT
-      if (R[i]) {
-        const p = R[i];
-        const stats = state.statsByPlayerId?.[p.player_id] || null;
-        const gp = gamesPlayed(stats);
-        const pts = fantasyPointsFromScoring(stats, state.scoring);
-        const avg = gp ? pts / gp : 0;
-        const proj = getProjectionPoints(p);
-
-        const url = fantasyProsUrl(p);
-        const nameText = phone ? shortName(p.full_name || "") : (p.full_name || "");
-
-        const phoneLines = phone
-          ? [
-              `Yrs ${yearsInLeague(p) || "—"}`,
-              `Pts ${pts ? format1(pts) : "0.0"}`,
-              `GP ${gp ? String(gp) : "0"}`,
-              `Avg ${gp ? format1(avg) : "0.0"}`,
-              `Proj ${proj || "0.0"}`
-            ]
-          : [];
-
-        const playerEl = phone
-          ? buildPlayerCellEl(nameText, url, phoneLines)
-          : (() => {
-              const a = document.createElement("a");
-              a.textContent = nameText;
-              if (url) {
-                a.href = url;
-                a.target = "_blank";
-                a.rel = "noopener noreferrer";
-              }
-              a.style.color = "inherit";
-              a.style.textDecoration = "none";
-              return a;
-            })();
-
-        rightTBody.appendChild(
-          trRow([
-            { className: "pos posCell", text: p.position || "" },
-            { className: `player ${playerStatusClass(rightRoster, p)}`, el: playerEl },
-            { className: "yrs", text: phone ? "" : yearsInLeague(p) },
-            { className: "pts", text: phone ? "" : (pts ? format1(pts) : "") },
-            { className: "gp", text: phone ? "" : (gp ? String(gp) : "") },
-            { className: "avg", text: phone ? "" : (gp ? format1(avg) : "") },
-            { className: "nfl", text: phone ? "" : proj },
-          ])
-        );
-      } else {
-        rightTBody.appendChild(
-          trRow([{ text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }], "emptyRow")
-        );
-      }
-    }
-
-    leftTBody.appendChild(
-      trRow([{ text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }], "sepRow")
-    );
-    rightTBody.appendChild(
-      trRow([{ text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }, { text: "" }], "sepRow")
-    );
-  }
-
-  addDraftPicksSection(leftTBody, state.currentLeftOwnerId);
-  addDraftPicksSection(rightTBody, state.currentRightOwnerId);
+  renderSingleRoster(leftTBody, leftRoster, state.currentLeftOwnerId, "Select a Left team…");
+  renderSingleRoster(rightTBody, rightRoster, state.currentRightOwnerId, "Select a Right team…");
 }
 
 /* =========================
