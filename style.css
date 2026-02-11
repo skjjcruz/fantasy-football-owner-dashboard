@@ -1,25 +1,30 @@
 /* =========================================
-   Owner Dashboard – CLEAN STABLE CSS (v4)
+   Owner Dashboard – Gold & Black Luxury Theme (v5)
    Goals:
    - Desktop/iPad: 3-column grid (Teams | Left | Right)
    - iPhone: Teams full width, then Left+Right side-by-side
    - iPhone controls: single row (horizontal scroll)
-   - No table-to-card conversion (too unstable)
+   - Gold/black luxury aesthetic matching Owner Dashboard style
 ========================================= */
 
 :root{
-  --bg: #0b0f14;
-  --panel: #111827;
-  --panel2: #0f172a;
-  --line: #1f2937;
-  --text: #e5e7eb;
-  --muted: #9ca3af;
-  --gold: #d4af37;
+  --bg: #0A0A0A;
+  --panel: #1A1A1A;
+  --panel2: #0A0A0A;
+  --line: rgba(212, 175, 55, 0.2);
+  --text: #FFFFFF;
+  --muted: #C0C0C0;
+  --gold: #D4AF37;
+  --dark-gold: #B8941E;
+  --charcoal: #2A2A2A;
 
   --starter: #064e3b;
   --ir: #7f1d1d;
   --taxi: #312e81;
   --rookie: #0c4a6e;
+
+  --win-green: #2ECC71;
+  --loss-red: #E74C3C;
 
   --teams-w: 320px;
 }
@@ -29,7 +34,7 @@ html, body{ height: 100%; }
 html{ overflow-x: hidden; }
 body{
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Oswald', sans-serif;
   background: var(--bg);
   color: var(--text);
   overflow-x: hidden;
@@ -40,9 +45,10 @@ body{
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--panel2);
-  border-bottom: 1px solid var(--line);
+  background: linear-gradient(135deg, var(--bg) 0%, var(--panel) 100%);
+  border-bottom: 3px solid var(--gold);
   padding: 10px 12px;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
 }
 
 .controls{
@@ -58,6 +64,9 @@ body{
   align-items: center;
   font-size: 14px;
   color: var(--muted);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .controls input,
@@ -65,31 +74,48 @@ body{
   height: 34px;
   padding: 6px 10px;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #111827;
+  border-radius: 6px;
+  background: var(--bg);
   color: var(--text);
   font-size: 14px;
+  font-family: 'Oswald', sans-serif;
   min-width: 130px;
+  transition: border-color 0.3s ease;
+}
+
+.controls input:focus,
+.controls select:focus{
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
 }
 
 #reloadBtn{
   height: 34px;
   padding: 0 14px;
   border: none;
-  border-radius: 10px;
-  font-weight: 800;
+  border-radius: 6px;
+  font-weight: 700;
   cursor: pointer;
-  background: var(--gold);
-  color: #111;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--dark-gold) 100%);
+  color: var(--bg);
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
-const handleBackToDashboard = () => {
-        // Always navigate back to the dashboard URL
-        window.location.href = 'https://skjjcruz.github.io/Owner-Dashboard---V10/';
-      };
+
+#reloadBtn:hover{
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.5);
+  transform: translateY(-1px);
+}
+
 .status{
   margin-top: 6px;
   font-size: 13px;
   color: var(--muted);
+  font-weight: 300;
 }
 
 /* ===== Main Layout (Desktop/iPad) ===== */
@@ -98,34 +124,35 @@ const handleBackToDashboard = () => {
   display: grid;
   grid-template-columns: var(--teams-w) minmax(0, 1fr) minmax(0, 1fr);
   gap: 14px;
-
-  /* Key: stop “mystery middle gap” from height collapse */
   align-items: stretch;
-  min-height: calc(100vh - 92px); /* ok if a little off; just needs to be >0 */
+  min-height: calc(100vh - 92px);
 }
 
 /* ===== Cards ===== */
 .teamsPane,
 .tablePane{
   background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   min-height: 0;
   box-shadow:
     0 0 0 1px rgba(212,175,55,0.05),
-    0 10px 30px rgba(0,0,0,0.35);
+    0 10px 30px rgba(0,0,0,0.5);
 }
 
 .paneTitle,
 .tableTitle{
   padding: 12px;
-  font-weight: 900;
-  background: var(--panel2);
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.1rem;
+  font-weight: 400;
+  background: var(--bg);
   color: var(--gold);
   border-bottom: 1px solid var(--line);
+  letter-spacing: 0.1em;
 }
 
 /* ===== Teams List ===== */
@@ -145,6 +172,11 @@ const handleBackToDashboard = () => {
   gap: 10px;
   padding: 8px 10px;
   border-bottom: 1px solid var(--line);
+  transition: all 0.3s ease;
+}
+
+.teamsList li:hover{
+  background: rgba(212, 175, 55, 0.08);
 }
 
 .teamName{
@@ -152,7 +184,7 @@ const handleBackToDashboard = () => {
   align-items: center;
   gap: 10px;
   min-width: 0;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 13px;
   color: var(--text);
 }
@@ -168,8 +200,8 @@ const handleBackToDashboard = () => {
   height: 28px;
   border-radius: 8px;
   object-fit: cover;
-  border: 1px solid #243244;
-  background: var(--panel2);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: var(--bg);
 }
 
 .teamButtons{
@@ -180,13 +212,20 @@ const handleBackToDashboard = () => {
 .btn{
   width: 30px;
   height: 26px;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  background: var(--panel2);
+  border-radius: 6px;
+  border: 1px solid var(--gold);
+  background: var(--bg);
   color: var(--gold);
-  font-weight: 900;
+  font-weight: 700;
   font-size: 12px;
+  font-family: 'Oswald', sans-serif;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn:hover{
+  background: var(--gold);
+  color: var(--bg);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
 }
 .btn:active{ transform: translateY(1px); }
 
@@ -200,10 +239,13 @@ const handleBackToDashboard = () => {
 
 .activityTitle{
   padding: 12px;
-  font-weight: 900;
-  background: var(--panel2);
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1rem;
+  font-weight: 400;
+  background: var(--bg);
   color: var(--gold);
   border-bottom: 1px solid var(--line);
+  letter-spacing: 0.1em;
 }
 
 .activityList{
@@ -219,11 +261,18 @@ const handleBackToDashboard = () => {
   padding: 10px 12px;
   border-bottom: 1px solid var(--line);
   font-size: 12px;
+  transition: background 0.3s ease;
+}
+
+.activityItem:hover{
+  background: rgba(212, 175, 55, 0.05);
 }
 
 .activityType{
-  font-weight: 900;
+  font-weight: 700;
   color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .activityMeta{
@@ -233,7 +282,7 @@ const handleBackToDashboard = () => {
 }
 
 .activityItem.muted{
-  color: #6b7280;
+  color: var(--muted);
   text-align: center;
 }
 
@@ -242,6 +291,25 @@ const handleBackToDashboard = () => {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   min-height: 0;
+}
+
+/* Custom scrollbar styling */
+.teamsList::-webkit-scrollbar,
+.activityList::-webkit-scrollbar,
+.tableScroll::-webkit-scrollbar{
+  width: 6px;
+}
+.teamsList::-webkit-scrollbar-track,
+.activityList::-webkit-scrollbar-track,
+.tableScroll::-webkit-scrollbar-track{
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 3px;
+}
+.teamsList::-webkit-scrollbar-thumb,
+.activityList::-webkit-scrollbar-thumb,
+.tableScroll::-webkit-scrollbar-thumb{
+  background: var(--gold);
+  border-radius: 3px;
 }
 
 table{
@@ -256,12 +324,15 @@ thead th{
   position: sticky;
   top: 0;
   z-index: 10;
-  background: var(--panel2);
+  background: var(--bg);
   color: var(--gold);
   border-bottom: 1px solid var(--line);
   padding: 10px;
   font-size: 12px;
   text-align: left;
+  font-family: 'Bebas Neue', cursive;
+  font-weight: 400;
+  letter-spacing: 0.08em;
 }
 
 tbody td{
@@ -272,11 +343,11 @@ tbody td{
 }
 
 tbody tr:hover td{
-  background: #0b1220;
+  background: rgba(212, 175, 55, 0.08);
 }
 
 /* Column sizing */
-th.pos, td.pos{ width: 52px; text-align: center; font-weight: 900; }
+th.pos, td.pos{ width: 52px; text-align: center; font-weight: 700; }
 th.player, td.player{ width: auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 th.yrs, td.yrs{ width: 46px; text-align: right; }
 th.pts, td.pts{ width: 76px; text-align: right; }
@@ -285,15 +356,20 @@ th.avg, td.avg{ width: 64px; text-align: right; }
 th.nfl, td.nfl{ width: 56px; text-align: right; color: var(--muted); }
 
 td.pos{
-  background: #3b2f0b;
-  color: #fff;
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--gold);
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 0.05em;
 }
 
 /* Group headers / separators */
 .groupRow td{
-  background: var(--panel2);
+  background: var(--bg);
   color: var(--gold);
-  font-weight: 900;
+  font-family: 'Bebas Neue', cursive;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--line);
 }
 .groupText{
   display: flex;
@@ -302,7 +378,7 @@ td.pos{
 }
 .sepRow td{
   background: var(--line);
-  height: 10px;
+  height: 2px;
   padding: 0;
 }
 
@@ -311,7 +387,7 @@ td.pos{
 #rightTable td.player.psStarter{
   background: var(--starter);
   color: #ecfdf5;
-  font-weight: 800;
+  font-weight: 700;
 }
 #leftTable td.player.psIR,
 #rightTable td.player.psIR{
@@ -328,35 +404,30 @@ td.pos{
   background: var(--rookie);
   color: #e0f2fe;
 }
+
 /* =========================================
    iOS/iPad Safari FIX: prevent scroll freeze after DOM updates
-   (Teams + Activity are two scroll panes)
 ========================================= */
-
-/* Use a real height so panes don't collapse/reflow into "non-scroll" */
 .layout{
   min-height: 0;
   height: calc(100dvh - 92px);
 }
-/* keep grid children allowed to shrink */
 .teamsPane,
 .tablePane{
   min-height: 0;
 }
 
-/* Left column split */
 .teamsPane{
   height: 100%;
   min-height: 0;
 }
 
-/* Two panes */
 .teamsList{
   flex: 1 1 0;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch; /* momentum on ONE pane */
+  -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
   transform: translateZ(0);
 }
@@ -364,7 +435,7 @@ td.pos{
 .activityPane{
   flex: 1 1 0;
   min-height: 0;
-  overflow: hidden; /* activityList handles scroll */
+  overflow: hidden;
 }
 
 .activityList{
@@ -374,19 +445,18 @@ td.pos{
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
-  transform: translateZ(0);   
+  transform: translateZ(0);
 }
 
-/* Clamp any child overflow that could cause sideways movement */
 .teamsList li,
 .activityItem{
   max-width: 100%;
   overflow-x: hidden;
 }
+
 /* =========================================================
    HARD LOCK: vertical scroll only (kills sideways drift)
 ========================================================= */
-
 html, body{
   overflow-x: hidden !important;
   max-width: 100%;
@@ -399,7 +469,6 @@ html, body{
   max-width: 100%;
 }
 
-/* Vertical-only scroll panes */
 .teamsList,
 .activityList,
 .tableScroll{
@@ -410,14 +479,12 @@ html, body{
   touch-action: pan-y;
 }
 
-/* Prevent children from forcing width */
 .teamsList li,
 .activityItem{
   max-width: 100%;
   overflow-x: hidden;
 }
 
-/* Tables are common horizontal offenders */
 table{
   width: 100%;
   max-width: 100%;
@@ -429,11 +496,11 @@ th.player, td.player{
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 /* =========================================================
    PHONE: single-row controls + side-by-side rosters
 ========================================================= */
 @media (max-width: 520px){
- /* Controls: ONE row, scroll sideways */
   .controls{
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
@@ -450,7 +517,7 @@ th.player, td.player{
   .controls select{
     min-width: 160px !important;
     width: 160px !important;
-    font-size: 16px !important; /* prevents iOS zoom */
+    font-size: 16px !important;
     padding: 10px 12px !important;
     height: auto !important;
   }
@@ -462,7 +529,6 @@ th.player, td.player{
     padding: 10px 14px !important;
   }
 
-  /* Layout: Teams spans full width; rosters side-by-side */
   .layout{
     grid-template-columns: 1fr 1fr !important;
     gap: 10px !important;
@@ -474,18 +540,15 @@ th.player, td.player{
     grid-column: 1 / -1 !important;
   }
 
-  /* tighter titles */
   .paneTitle,
   .tableTitle{
     padding: 10px 10px !important;
     font-size: 13px !important;
   }
 
-  /* tighten table a bit */
   thead th{ padding: 8px; font-size: 11px; }
   tbody td{ padding: 8px; font-size: 12px; }
 
-  /* hide least important columns on phone */
   th.avg, td.avg{ display: none; }
   th.yrs, td.yrs{ display: none; }
 
@@ -493,27 +556,27 @@ th.player, td.player{
   th.pts, td.pts{ width: 70px; }
   th.gp,  td.gp{  width: 46px; }
   th.nfl, td.nfl{ width: 56px; }
-   
-/* PHONE FIX: keep Player column visible */
-table{
-  table-layout: auto !important;
+
+  table{
+    table-layout: auto !important;
+  }
+
+  th.player,
+  td.player{
+    width: 55% !important;
+    min-width: 140px !important;
+  }
+
+  td.player a{
+    display: inline-block !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
 }
 
-th.player,
-td.player{
-  width: 55% !important;
-  min-width: 140px !important;
-}
-
-/* ensure player name text can actually render */
-td.player a{
-  display: inline-block !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
-}
-/* Super narrow phones: stack rosters to avoid unreadable squish */
+/* Super narrow phones */
 @media (max-width: 340px){
   .layout{
     grid-template-columns: 1fr !important;
@@ -521,19 +584,26 @@ td.player a{
   .teamsPane{
     grid-column: 1 / -1 !important;
   }
-}#draftBoardBtn {
+}
+
+#draftBoardBtn {
   height: 34px;
   padding: 0 14px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 800;
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  font-weight: 700;
   cursor: pointer;
-  background: #3b82f6; /* blue instead of gold */
-  color: #fff;
+  background: var(--bg);
+  color: var(--gold);
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   margin-right: 8px;
+  transition: all 0.3s ease;
 }
 
 #draftBoardBtn:hover {
-  background: #2563eb;
+  background: var(--gold);
+  color: var(--bg);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
 }
-
