@@ -1124,15 +1124,26 @@ async function loadLeagueData() {
     }
   }
 
-  state.currentLeftOwnerId = null;
+  // Auto-select the logged-in owner's team for the left column
+  const ownerUserId = state.user?.user_id ? String(state.user.user_id) : null;
+  const ownerRoster = ownerUserId ? state.rosterByOwner[ownerUserId] : null;
+
+  if (ownerRoster) {
+    state.currentLeftOwnerId = ownerUserId;
+    setRosterTitle(elLeftTitle, ownerUserId);
+    primeProjectionsForRoster(ownerRoster);
+  } else {
+    state.currentLeftOwnerId = null;
+    if (elLeftTitle) elLeftTitle.textContent = "Left Roster";
+  }
+
   state.currentRightOwnerId = null;
-  if (elLeftTitle) elLeftTitle.textContent = "Left Roster";
   if (elRightTitle) elRightTitle.textContent = "Right Roster";
 
   renderTeamsList();
   renderCompareTables();
 
-  setStatus(`Ready ✅ (Tap L / R on a team) — League ${state.season}, Stats ${state.statsSeason}, Week ${state.week || 1}`);
+  setStatus(`Ready ✅ (Select a team to compare) — League ${state.season}, Stats ${state.statsSeason}, Week ${state.week || 1}`);
 }
 /* =========================
    Boot / reload wiring
