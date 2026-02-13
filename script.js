@@ -42,6 +42,7 @@ const elStatsSeason = document.getElementById("statsSeasonInput"); // Stats Seas
 const elLeagueSelect = document.getElementById("leagueSelect");
 const elReloadBtn = document.getElementById("reloadBtn");
 const elDraftBoardBtn = document.getElementById("draftBoardBtn");
+const elMainBtn = document.getElementById("mainBtn");
 
 // Activity DOM hook
 const elActivityList = document.getElementById("activityList");
@@ -1076,6 +1077,15 @@ async function fullReload() {
 }
 
 if (elReloadBtn) elReloadBtn.addEventListener("click", fullReload);
+// Main page navigation
+if (elMainBtn) {
+  elMainBtn.addEventListener('click', () => {
+    const username = state.username || '';
+    const season = state.season || DEFAULT_LEAGUE_SEASON;
+    const url = `https://skjjcruz.github.io/Owner-Dashboard---V10/?username=${encodeURIComponent(username)}&season=${encodeURIComponent(season)}`;
+    window.location.href = url;
+  });
+}
 // Draft Board navigation
 if (elDraftBoardBtn) {
   elDraftBoardBtn.addEventListener('click', () => {
