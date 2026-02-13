@@ -90,6 +90,7 @@ body{
   box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
 }
 
+#mainBtn,
 #reloadBtn{
   height: 34px;
   padding: 0 14px;
@@ -106,6 +107,7 @@ body{
   box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
+#mainBtn:hover,
 #reloadBtn:hover{
   box-shadow: 0 4px 16px rgba(212, 175, 55, 0.5);
   transform: translateY(-1px);
@@ -521,6 +523,7 @@ th.player, td.player{
     padding: 10px 12px !important;
     height: auto !important;
   }
+  #mainBtn,
   #reloadBtn{
     flex: 0 0 auto !important;
     min-width: 120px !important;
